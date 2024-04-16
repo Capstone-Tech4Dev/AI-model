@@ -48,11 +48,11 @@ python app.py
 
 The API will start running on http://localhost:5000/.
 
-## API Endpoints
+API Endpoints
 /predict (POST)
 This endpoint accepts POST requests with JSON data containing the user's information. The API then preprocesses the data and predicts the best learning track using the Random Forest model.
 
-### Example Request:
+Example Request:
 
 
 {
@@ -62,10 +62,11 @@ This endpoint accepts POST requests with JSON data containing the user's informa
   "preferred_language": "Python",
   "learning_style": "Visual"
 }
-### Example Response:
+Example Response:
 
 
 ["Web Development"]
+```
 ## Data Preprocessing
 Before making predictions, the API preprocesses the data to match the format used during model training. This includes applying saved LabelEncoders to categorical columns. The preprocessing function ensures that the input data is transformed correctly before prediction.
 
