@@ -31,20 +31,31 @@ def preprocess_data(new_data):
             new_data[col] = encoder.transform(new_data[col])
     return new_data
 
-@app.route('/predict',methods =['POST'])
+@app.route('/predict', methods=['POST'])
 def predict():
-     #extract data from the POST request
-    data = request.get_json(force=True)
-    new_data = pd.DataFrame([data]) #this is to convert data into dataframe
+    try:
+        # Extract data from the POST request
+        data = request.get_json(force=True)
+        new_data = pd.DataFrame([data])  # Convert data into dataframe
 
-    # Preprocess the new data to fit the model's requirements using saved encoders
-    preprocessed_data = preprocess_data(new_data)
+        # Preprocess the new data to fit the model's requirements using saved encoders
+        preprocessed_data = preprocess_data(new_data)
 
-    #predict using the loaded data
-    predictions = loaded_model.predict(preprocessed_data)
-    
-    # Convert predictions to a suitable format for the response
-    return jsonify(predictions.tolist())
+        # Predict using the loaded data
+        predictions = loaded_model.predict(preprocessed_data)
+
+        # Convert predictions to a suitable format for the response
+        response_data = {
+            "predicted_tracks": predictions.tolist()
+        }
+
+        return jsonify(response_data)
+
+    except Exception as e:
+        # Log the exception
+        print(f"Error occurred: {e}")
+        return jsonify({"error": "Internal Server Error"}), 500
+
 
 
 if __name__ == '__main__':
