@@ -31,20 +31,30 @@ def preprocess_data(new_data):
             new_data[col] = encoder.transform(new_data[col])
     return new_data
 
-@app.route('/predict',methods =['POST'])
+@app.route('/predict', methods=['POST'])
 def predict():
-     #extract data from the POST request
+    # extract data from the POST request
     data = request.get_json(force=True)
-    new_data = pd.DataFrame([data]) #this is to convert data into dataframe
+    new_data = pd.DataFrame([data])  # this is to convert data into dataframe
 
     # Preprocess the new data to fit the model's requirements using saved encoders
     preprocessed_data = preprocess_data(new_data)
 
-    #predict using the loaded data
+    # predict using the loaded data
     predictions = loaded_model.predict(preprocessed_data)
     
-    # Convert predictions to a suitable format for the response
-    return jsonify(predictions.tolist())
+    # Additional information about the predicted track
+    track_info = {
+        "predicted_track": predictions[0],
+        "details": {
+            "learning_path": "Web Development",
+            "recommended_resources": ["Online courses", "Books", "Tutorials"],
+            "next_steps": "Start with HTML and CSS"
+        }
+    }
+
+    # Return the track information in JSON format
+    return jsonify(track_info)
 
 
 if __name__ == '__main__':
