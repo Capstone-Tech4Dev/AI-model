@@ -33,7 +33,7 @@ def preprocess_data(new_data):
 
 @app.route('/predict',methods =['POST'])
 def predict():
-     #extract data from the POST request
+    #extract data from the POST request
     data = request.get_json(force=True)
     new_data = pd.DataFrame([data]) #this is to convert data into dataframe
 
@@ -44,7 +44,10 @@ def predict():
     predictions = loaded_model.predict(preprocessed_data)
     
     # Convert predictions to a suitable format for the response
-    return jsonify(predictions.tolist())
+    response_data = {
+        "predicted_tracks": predictions.tolist()
+    }
+    return jsonify(response_data)
 
 
 if __name__ == '__main__':
